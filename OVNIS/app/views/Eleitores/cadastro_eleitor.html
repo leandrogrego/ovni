@@ -1,0 +1,64 @@
+#{extends 'main.html' /}
+#{set title:'Cadastro de Eleitor' /}
+
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fa fa-table"></i>Cadastro de Eleitor
+    </div>
+    <div class="card-body">
+        <form action="@{Eleitores.salvar_eleitor}" method="get">
+            <input type="hidden" value="${eleitor?.id}" name="eleitor.id">
+            <div class="form-group">
+               <label for="titulo">#ID ${eleitor?.id}</label>
+            </div>
+            <div class="form-group">
+               <label for="nome">Titulo</label>
+               <input class="form-control #{ifError 'eleitor.titulo'} is-invalid#{/ifError}" id="nome" type="text" value="${eleitor == null ? flash['eleitor.titulo'] : eleitor.titulo}" name="eleitor.titulo">
+                #{ifError 'eleitor.titulo'}
+        	   <div class="invalid-feedback">#{error 'eleitor.titulo' /}</div>  	   		 
+                #{/ifError}
+            </div>
+            
+            <div class="form-group">
+               <label for="nome">Nome</label>
+               <input class="form-control #{ifError 'eleitor.nome'} is-invalid#{/ifError}" id="nome" type="text" value="${eleitor == null ? flash['eleitor.nome'] : eleitor.nome}" name="eleitor.nome">
+                #{ifError 'eleitor.nome'}
+        	   <div class="invalid-feedback">#{error 'eleitor.nome' /}</div>  	   		 
+                #{/ifError}
+            </div>
+            <div class="form-group">
+               <label for="zona">Zona-Secão</label>
+               <select name="idSecao">
+                   #{list items:secoes, as:'secao'}
+                   <option value="${secao.id}"
+                        ${(eleitor?.getSecao() !=null && eleitor?.getSecao() == secao)? 'selected':''}>
+                        ${secao.getZona().getId()}
+                        ${secao.getZona().getNome()}
+                        - ${secao.getId()} 
+                        ${secao.getNome()}</option>
+                   #{/list}
+               </select>
+            </div>
+            <div class="form-group">
+               <label for="zona">Status</label> |
+                   #{list items:states, as:'state'}
+                   <input type="radio" name="eleitor.statusEle" value="${state}"
+                        ${(eleitor?.getStatusEleitor() == state)? 'checked':''}>
+                        ${state} | 
+                   #{/list}
+            </div>
+            <div class="form-group">
+               <label for="zona">Status da votação: </label>
+                    ${eleitor?.getStatusVoto()}
+            </div>
+            
+            <div class="form-group">
+                <input class="btn btn-success btn-block" type="submit" value="Salvar">
+                <br>
+                <a href="@{Eleitores.listar_eleitores}">
+                     <input type=button value="Cancelar" class="btn btn-danger btn-block">
+                </a> 
+            </div>
+        </form>
+    </div>
+</div>

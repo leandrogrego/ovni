@@ -1,0 +1,44 @@
+#{extends 'main.html' /}
+#{set title:'Detalhes' /}
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fa fa-table"></i>Detalhes da Zona</div>
+    <div class="card-body">
+        <div class="form-group">
+            ID: ${zona?.id}
+        </div>
+        <div class="form-group">
+            Nome: ${zona?.nome}
+        </div>
+        <div class="form-group">
+            Zona-Seção:
+            #{list items:zona?.getSecoes(), as:'secao'}
+                ${secao.id}-${secao.nome}, 
+            #{/list}
+        </div>
+        <br>
+        <form action="@{Zonas.editar_zona}" method="get">
+            <input type="hidden" name="id" value="${zona.id}">
+            <input type="submit" class="btn btn-primary btn-block" value="Editar">
+        </form>
+        <br>
+        <script>
+            function confirmDelete(form){
+                r = confirm("Tem Certeza que deseja remover a zona?");
+                if(r){
+                    form.action = "@{Zonas.remover_zona}";
+                }
+            }
+        </script>
+        <form onsubmit="confirmDelete(this)" action="" method="get">
+            <input type="hidden" name="id" value="${zona.id}">
+            <input type="submit" class="btn btn-danger btn-block" value="Remover">
+        </form>
+        <br>
+        <form action="@{Zonas.listar_zonas}" method="get">
+            <input type="submit" class="btn btn-warning btn-block" value="Listar">
+        </form>
+        <br>
+    </div>
+</div>
+
