@@ -1,0 +1,80 @@
+#{extends 'main.html' /} 
+#{set title:'Home' /}
+<script src="/public/js/JSON2Table.js" charset="UTF-8"></script>
+<h2>API Sample</h2>
+    <table><tr><th>JSON</th><th>HTML</th></tr>
+        <tr valign=top>
+            <td>
+                <select id=code onChange="loadDoc('GET',this.value,'');">
+                  <option value="/api/getCargos?idSecao">/api/getCargos?idSecao=1</option>
+                  <option value="/api/getEleitor?titulo=20152094040050">/api/getEleitor?titulo=20152094040050</option>
+                  <option value="/api/getCandidato?idSecao=1&numero=10&idCargo=1">/api/getCandidato?isSecao=1&numero=10&idCargo=1</option>
+                  <option value="/api/getCandidato?idSecao=1&numero=10&idCargo=2">/api/getCandidato?isSecao=1&numero=10&idCargo=2</option>
+                  <option value="/api/setVotoEleitor?numCandidato=10&ipUrna=localhost">/api/setVotoEleitor?numCandidato=10&ipUrna=localhost</option>
+                  <option value="/api/getUrna?idSecao=1">/api/getUrna?idSecao=1</option>
+                  <option value="/api/setTerminal?idSecao=1&ipTerminal">/api/setUrna?idSecao=1&ipUrna=localhost</option>
+                  <option value="/api/getTerminal?idSecao=1">/api/getTerminal?idSecao=1</option>
+                  <option value="/api/setTerminal?idSecao=1&ipTerminal">/api/setTerminal?idSecao=1&ipTerminal=localhost</option>
+                  <option value="/api/justificar?idSecao=1&titulo=20152094040050">/api/justificar?idSecao=1&titulo=20152094040050</option>
+                  <option value="/api/setstatuseleitor?idSecao=1&titulo=20152094040050">/api/setstatuseleitor?idSecao=1&titulo=20152094040050</option>
+                  <option value="/api/setstatuseleitor?idSecao=1&titulo=20181094040026">/api/setstatuseleitor?idSecao=1&titulo=20181094040026</option>
+                          
+                          >/api/setstatuseleitor?idSecao=1&titulo=20152094040050</option>
+                </select>
+                <pre>
+                    <div id="jsonview"></div>
+                </pre>
+            </td>
+            <td>
+                <div id="htmlview"></div>
+            </td>
+        </tr>
+    </table>
+</body>
+<script>
+    function loadDoc(method, url, params) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open(method, url, true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send(params);
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200){
+                document.getElementById('jsonview').innerHTML = "<code>"+this.responseText+"</code>";
+                document.getElementById('htmlview').innerHTML = '<a target="new" href="'+url+'">'+url+'</a>';
+                document.getElementById('htmlview').innerHTML += convert(this.responseText);
+            }
+        };
+    }
+    function replaceAll(str, de, para){
+        var pos = str.indexOf(de);
+        while (pos > -1){
+                    str = str.replace(de, para);
+                    pos = str.indexOf(de);
+            }
+        return (str);
+    }
+    
+    function convert(text){
+        text = replaceAll(text,"[","")
+        text = replaceAll(text,"]","")
+        text = replaceAll(text,'"',"")
+        text = replaceAll(text,"{","<table border=1><tr><th>")
+        text = replaceAll(text,"}","</td></tr></table>")
+        text = replaceAll(text,",","</td></tr><tr><th>")
+        text = replaceAll(text,":","</b></th><td>")
+        return text;
+    }
+    
+    function load(method, url, params) {
+        method="GET";
+        url = "/api/getCargos";
+        params = "";
+        alvo = "tableVotos";
+        loadDoc(alvo, method, url, params);
+    }
+    
+    function start(){
+        load();
+        window.setInterval(load, 10000);
+    }
+</script>

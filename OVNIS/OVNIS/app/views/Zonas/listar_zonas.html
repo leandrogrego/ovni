@@ -1,0 +1,45 @@
+#{extends 'main.html' /}
+#{set title:'Listar Usuários' /}
+
+<div class="card mb-3">
+ <div class="card-header">
+   <i class="fa fa-table"></i>Listagem de Zonas</div>
+ <div class="card-body">
+     <table class="table dataTable" id="dataTable">
+       <thead>
+         <tr><th rowspan="1" colspan="1">#Zona</th>
+         <th rowspan="1" colspan="1">Nome</th>
+         <th rowspan="1" colspan="1">Secões</th>
+         <th>Ações</th>
+       </thead>
+       <tbody>
+	#{list items:zonas, as:'zona'}
+        <tr role="row">
+           <td>${zona.id}</td>
+           <td>${zona.nome}</td>
+           <td>
+                #{list items:zona.secoes, as:'secao'}
+                <option value="${zona.id}">
+                       ${secao.id} - ${secao.nome}<br />
+                </option>
+                #{/list}
+           </td>
+           <td>
+                <a href="@{Zonas.detalhes_zona(zona.id)}">
+                    <button class="btn btn-sm btn-info">
+                        <i class="fa fa-user">Detalhes</i>
+                    </button>
+                </a>
+                    
+                <a href="@{Zonas.editar_zona(zona.id)}">
+                    <button class="btn btn-sm btn-success">
+                        <i class="fa fa-edit">Editar</i>
+                    </button>
+                </a>
+           </td>
+         </tr>
+	#{/list}
+	</tbody>
+    </table>
+  </div>
+</div>

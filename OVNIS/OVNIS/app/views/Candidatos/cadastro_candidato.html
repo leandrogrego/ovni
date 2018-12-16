@@ -1,0 +1,58 @@
+#{extends 'main.html' /}
+#{set title:'Cadastro do Candidato' /}
+
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fa fa-table"></i>Cadastro do Candidato
+    </div>
+    <div class="card-body">
+        <form action="@{Candidatos.salvar_candidato}" method="get">
+            <input type="hidden" value="${candidato?.id}" name="candidato.id">
+            <div class="form-group">
+               <label for="titulo">#ID ${candidato?.id}</label>
+            </div>
+            <div class="form-group">
+               <label for="nome">Nome</label>
+               <input class="form-control #{ifError 'candidato.nome'} is-invalid#{/ifError}" id="nome" type="text" value="${candidato == null ? flash['candidato.nome'] : candidato.nome}" name="candidato.nome">
+                #{ifError 'candidato.nome'}
+        	   <div class="invalid-feedback">#{error 'candidato.nome' /}</div>  	   		 
+                #{/ifError}
+            </div>
+            
+            <div class="form-group">
+               <label for="nome">Numero</label>
+               <input class="form-control #{ifError 'candidato.numero'} is-invalid#{/ifError}" id="nome" type="text" value="${candidato == null ? flash['candidato.numero'] : candidato.numero}" name="candidato.numero">
+                #{ifError 'candidato.numero'}
+        	   <div class="invalid-feedback">#{error 'candidato.numero' /}</div>  	   		 
+                #{/ifError}
+            </div>
+            <div class="form-group">
+               <label for="zona">Zona</label>
+               <select name="idZona">
+                   <option value=null>Todas as Zonas</option>
+                   #{list items:zonas, as:'zona'}
+                        <option value="${zona.id}" ${(candidato?.getZona()?.getId() == zona.getId())? 'selected':''}>
+                                ${zona.id} - ${zona.getNome()}</option>
+                   #{/list}
+                   
+               </select>
+            </div>
+            <div class="form-group">
+               <label for="cargo">Cargo</label>
+               <select name="candidato.idCargo">
+                   #{list items:cargos, as:'cargo'}
+                        <option value="${cargo.id}" ${(candidato?.idCargo == cargo.getId())? 'selected':''}>
+                            ${cargo.nome}</option>
+                   #{/list}
+               </select>
+            </div>
+            <div class="form-group">
+                <input class="btn btn-success btn-block" type="submit" value="Salvar">
+                <br>
+                <a href="@{Candidatos.listar_candidatos}">
+                     <input type=button value="Cancelar" class="btn btn-danger btn-block">
+                </a> 
+            </div>
+        </form>
+    </div>
+</div>

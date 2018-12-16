@@ -1,0 +1,44 @@
+#{extends 'main.html' /}
+#{set title:'Cadastro de Secao' /}
+
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fa fa-table"></i>Cadastro de Secao
+    </div>
+    <div class="card-body">
+        <form action="@{Secoes.salvar_secao}" method="get">
+            <input type="hidden" value="${secao?.id}" name="secao.id">
+            <div class="form-group">
+               <label for="secao">#Sssão ${secao?.zona} ${secao?.id}</label>
+            </div>
+            <div class="form-group">
+               <label for="zon
+                      a">Zona</label>
+               <select name="idZona">
+                   #{list items:zonas, as:'zona'}
+                   <option value="${zona.id}"
+                        ${(secao?.getZona()?.getId() !=null && secao?.getZona() == zona)? 'selected':''}>
+                        ${zonaw?.getId()} - ${zona.nome}</option>
+                   #{/list}
+               </select>
+            </div>
+            
+            
+            <div class="form-group">
+               <label for="nome">Nome</label>
+               <input class="form-control #{ifError 'secao.nome'} is-invalid#{/ifError}" id="nome" type="text" value="${secao == null ? flash['secao.nome'] : secao.nome}" name="secao.nome">
+                #{ifError 'secao.nome'}
+        	   <div class="invalid-feedback">#{error 'secao.nome' /}</div>  	   		 
+                #{/ifError}
+            </div>
+            
+            <div class="form-group">
+                <input class="btn btn-success btn-block" type="submit" value="Salvar">
+                <br>
+                <a href="@{Secoes.listar_Secoes}">
+                     <input type=button value="Cancelar" class="btn btn-danger btn-block">
+                </a> 
+            </div>
+        </form>
+    </div>
+</div>

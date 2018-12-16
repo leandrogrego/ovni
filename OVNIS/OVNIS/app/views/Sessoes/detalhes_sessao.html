@@ -1,0 +1,52 @@
+#{extends 'main.html' /}
+#{set title:'Detalhes' /}
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fa fa-table"></i>Detalhes da Secão</div>
+    <div class="card-body">
+        <div class="form-group">
+            ID: ${secao?.id}
+        </div>
+        <div class="form-group">
+            Nome: ${secao?.nome}
+        </div>
+        <div class="form-group">
+            #{if secao.ipTerminal != null && secao.ipTerminal != ""}
+                <form action="@{Secoes.resetTerminal}" method="get">
+                    <input type="hidden" name="id" value="${secao.id}">
+                    <input type="submit" class="btn btn-balck btn-group" value="Reset Terminal">
+                </form>
+            #{/if}
+            #{if secao.ipUrna != null && secao.ipUrna != ""}
+                <form action="@{Secoes.resetUrna}" method="get">
+                    <input type="hidden" name="id" value="${secao.id}">
+                    <input type="submit" class="btn btn-black btn-group" value="Reset Urna">
+                </form>
+            #{/if}
+        </div>
+        <br>
+        <form action="@{Secoes.editar_secao}" method="get">
+            <input type="hidden" name="id" value="${secao.id}">
+            <input type="submit" class="btn btn-primary btn-block" value="Editar">
+        </form>
+        <br>
+        <script>
+            function confirmDelete(form){
+                r = confirm("Tem Certeza que deseja remover a Secão?");
+                if(r){
+                    form.action = "@{Secoes.remover_secao}";
+                }
+            }
+        </script>
+        <form onsubmit="confirmDelete(this)" action="" method="get">
+            <input type="hidden" name="id" value="${secao.id}">
+            <input type="submit" class="btn btn-danger btn-block" value="Remover">
+        </form>
+        <br>
+        <form action="@{Secoes.listar_secoes}" method="get">
+            <input type="submit" class="btn btn-warning btn-block" value="Listar">
+        </form>
+        <br>
+    </div>
+</div>
+

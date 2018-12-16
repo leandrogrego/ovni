@@ -1,0 +1,133 @@
+#{extends 'main.html' /} 
+#{set title:'Home' /}
+
+<h2>Bem Vindo</h2>
+  <div class="col-xl-3 col-sm-6 mb-3">
+    <div class="card text-white bg-primary o-hidden h-100">
+      <div class="card-body">
+        <div class="card-body-icon">
+          <i class="fa fa-fw fa-user"></i>
+        </div>
+        <div class="mr-5">Eleitores</div>
+      </div>
+      <a class="card-footer text-white clearfix small z-1" href="@{Eleitores.listar_eleitores}">
+        <span class="float-left">Listar Eleitores</span>
+        <span class="float-right">
+          <i class="fa fa-angle-right"></i>
+        </span>
+      </a>
+      <a class="card-footer text-white clearfix small z-1" href="@{Eleitores.cadastro_eleitor}">
+        <span class="float-left">Adicionar Eleitor</span>
+        <span class="float-right">
+          <i class="fa fa-angle-right"></i>
+        </span>
+      </a>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-sm-6 mb-3">
+    <div class="card text-white bg-warning o-hidden h-100">
+      <div class="card-body">
+        <div class="card-body-icon">
+          <i class="fa fa-fw fa-wrench"></i>
+        </div>
+        <div class="mr-5">Zonas e Seções</div>
+      </div>
+      <a class="card-footer text-white clearfix small z-1" href="@{Zonas.listar_zonas}">
+        <span class="float-left">Listar Zonas</span>
+        <span class="float-right">
+          <i class="fa fa-angle-right"></i>
+        </span>
+      </a>
+      <a class="card-footer text-white clearfix small z-1" href="@{Secoes.listar_secoes}">
+        <span class="float-left">Listar Seções</span>
+        <span class="float-right">
+          <i class="fa fa-angle-right"></i>
+        </span>
+      </a>
+      <a class="card-footer text-white clearfix small z-1" href="@{Zonas.cadastro_zona}">
+        <span class="float-left">Adicionar Zona</span>
+        <span class="float-right">
+          <i class="fa fa-angle-right"></i>
+        </span>
+      </a>
+      <a class="card-footer text-white clearfix small z-1" href="@{Secoes.cadastro_secao}">
+        <span class="float-left">Adicionar Seção</span>
+        <span class="float-right">
+          <i class="fa fa-angle-right"></i>
+        </span>
+      </a>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-sm-6 mb-3">
+    <div class="card text-white bg-success o-hidden h-100">
+      <div class="card-body">
+        <div class="card-body-icon">
+          <i class="fa fa-fw fa-user"></i>
+        </div>
+        <div class="mr-5">Candidatos</div>
+      </div>
+      <a class="card-footer text-white clearfix small z-1" href="@{Candidatos.listar_candidatos}">
+        <span class="float-left">Listar Candidatos</span>
+        <span class="float-right">
+          <i class="fa fa-angle-right"></i>
+        </span>
+      </a>
+      <a class="card-footer text-white clearfix small z-1" href="@{Candidatos.cadastro_candidato}">
+        <span class="float-left">Adicionar Candidato</span>
+        <span class="float-right">
+          <i class="fa fa-angle-right"></i>
+        </span>
+      </a>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-sm-6 mb-3">
+    <div class="card text-white bg-danger o-hidden h-100">
+      <div class="card-body">
+        <div class="card-body-icon">
+          <i class="fa fa-fw fa-user"></i>
+        </div>
+        <div class="mr-5">Cargo</div>
+      </div>
+      <a class="card-footer text-white clearfix small z-1" href="@{Cargos.listar_cargos}">
+        <span class="float-left">Listar Cargos</span>
+        <span class="float-right">
+          <i class="fa fa-angle-right"></i>
+        </span>
+      </a>
+      <a class="card-footer text-white clearfix small z-1" href="@{Cargos.cadastro_cargo}">
+        <span class="float-left">Adicionar Cargos</span>
+        <span class="float-right">
+          <i class="fa fa-angle-right"></i>
+        </span>
+      </a>
+    </div>
+  </div>
+  
+
+  <div class="co2-x2-3 col-sm-6 mb-3">
+        <h2>Apuração:</h2>
+        <div class="card-body">
+        <table class="table dataTable" id="Table">
+          <thead>
+            <tr><th rowspan="1" colspan="1">#</th>
+            <th rowspan="1" colspan="1">Cargo</th>
+            <th rowspan="1" colspan="1">Nome</th>
+            <th rowspan="1" colspan="1">Votos</th>
+          </thead>
+          <tbody>
+           #{list items:candidato, as:'candidato'}
+           <tr role="row">
+              <td>${candidato.getId}</td>
+              <td>${candidato.getCargo}</td>
+              <td>${candidato.getNome}</td>
+              <td>${candidato.getVotos}</td>
+            </tr>
+           #{/list}
+           </tbody>
+       </table>
+     </div>
+
+  </div> 
