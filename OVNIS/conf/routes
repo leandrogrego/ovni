@@ -4,6 +4,14 @@
 
 # Home page
 GET     /                                       Application.index
+GET     /Id_Secao/{secaoId}                     Gerenciador.getEleitores
+GET     /titulo/{titulo}                        Gerenciador.justificar
+GET     /Id_Secao/{idSecao}                     Gerenciador.getCandidatos
+GET     /Id_Secao/{idSecao}                     Gerenciador.getUrna
+POST    /insert                                 Gerenciador.setUrna
+GET     /Id_Secao/{idSecao}                     Gerenciador.getTerminal
+POST    /insert                                 Gerenciador.setStatusEleitor
+POST    /insert                                 Gerenciador.setVotoEleitor
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
