@@ -7,14 +7,25 @@
         <div class="form-group">
             ID: ${candidato?.id}
         </div>
-        <div class="form-group">
-            Nome: ${candidato?.nome}
+        <div   class="form-group col-md-2 margem"> 
+            #{if candidato?.foto?.exists()}
+            <img height="100" src="@{Api.fotoCandidato(candidato.id)}" id="img" accept="image/*" class="img-responsive" class="img-thumbnail" >
+            #{/if}
+            #{else}
+            <img height="100" src="/public/images/fotoPadrao.jpg" id="img" accept="image/*"  class="img-responsive" class="img-thumbnail" >
+            #{/else}
+
         </div>
-        <div class="form-group">
+         <div class="form-group">
             Numero: ${candidato?.numero}
         </div>
         <div class="form-group">
-            Zona: ${candidato?.zona.nome}
+            Nome: ${candidato?.nome}
+        <br />
+            Vice ${candidato?.vice  }
+        </div>
+        <div class="form-group">
+            Zona: ${candidato?.zona?.nome}
         </div>
         <div class="form-group">
             Cargo: ${cargo?.nome}

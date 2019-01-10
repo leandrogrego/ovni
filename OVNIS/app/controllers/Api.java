@@ -143,6 +143,13 @@ public class Api extends Controller{
         renderJSON(g.toJson(candidatos));
     }
     
+    public static  void  fotoCandidato(Long id) {
+        Candidato candidato = Candidato.findById(id);
+        notFoundIfNull(candidato);
+        response.setContentTypeIfNotSet(candidato.foto.type());
+        renderBinary(candidato.foto.get());
+    }
+        
     public void resetAll(){
         List<Candidato> candidatos = Candidato.findAll();
         candidatos.forEach(c -> {

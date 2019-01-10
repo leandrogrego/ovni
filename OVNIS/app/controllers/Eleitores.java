@@ -27,7 +27,6 @@ public class Eleitores extends Controller{
     
     public static void salvar_eleitor(Eleitor eleitor, long idSecao) {
         Secao secao = Secao.findById(idSecao);
-        System.out.println(idSecao);
         eleitor.setSecao(secao);
         eleitor.save();
         renderTemplate("Eleitores/detalhes_eleitor.html", eleitor);

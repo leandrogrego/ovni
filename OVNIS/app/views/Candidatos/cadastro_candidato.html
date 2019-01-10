@@ -6,10 +6,17 @@
         <i class="fa fa-table"></i>Cadastro do Candidato
     </div>
     <div class="card-body">
-        <form action="@{Candidatos.salvar_candidato}" method="get">
+        <form action="@{Candidatos.salvar_candidato}" name="Filter" class="form" method="post" enctype="multipart/form-data">>
             <input type="hidden" value="${candidato?.id}" name="candidato.id">
             <div class="form-group">
                <label for="titulo">#ID ${candidato?.id}</label>
+            </div>
+            <div class="form-group">
+               <label for="nome">Numero</label>
+               <input class="form-control #{ifError 'candidato.numero'} is-invalid#{/ifError}" id="nome" type="text" value="${candidato == null ? flash['candidato.numero'] : candidato.numero}" name="candidato.numero">
+                #{ifError 'candidato.numero'}
+        	   <div class="invalid-feedback">#{error 'candidato.numero' /}</div>  	   		 
+                #{/ifError}
             </div>
             <div class="form-group">
                <label for="nome">Nome</label>
@@ -18,14 +25,38 @@
         	   <div class="invalid-feedback">#{error 'candidato.nome' /}</div>  	   		 
                 #{/ifError}
             </div>
-            
             <div class="form-group">
-               <label for="nome">Numero</label>
-               <input class="form-control #{ifError 'candidato.numero'} is-invalid#{/ifError}" id="nome" type="text" value="${candidato == null ? flash['candidato.numero'] : candidato.numero}" name="candidato.numero">
-                #{ifError 'candidato.numero'}
-        	   <div class="invalid-feedback">#{error 'candidato.numero' /}</div>  	   		 
+               <label for="vice">Vice</label>
+               <input class="form-control #{ifError 'candidato.vice'} is-invalid#{/ifError}" id="vice" type="text" value="${candidato == null ? flash['candidato.nome'] : candidato.vice}" name="candidato.vice">
+                #{ifError 'candidato.vice'}
+        	   <div class="invalid-feedback">#{error 'candidato.vice' /}</div>  	   		 
                 #{/ifError}
             </div>
+            
+ 
+           <div   class="form-group col-md-2 margem"> 
+
+                #{if candidato?.foto?.exists()}
+                    <img height="100" src="@{Api.fotoCandidato(candidato.id)}" id="img" accept="image/*" class="img-responsive" class="img-thumbnail" >
+                #{/if}
+                #{else}
+                    <img height="100" src="/public/images/fotoPadrao.jpg" id="img" accept="image/*"  class="img-responsive" class="img-thumbnail" >
+                #{/else}
+
+                <div id ="form-group col-md-2 margem">
+                    <div >  
+                        <label class="btn btn-primary btn-sm " for='upload' ><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span></label>
+                        <input id="upload" class="form-control" type="file" name="candidato.foto"  onChange="uploadimg()" >
+                        #{if candidato.id != null && candidato.foto.exists()}
+                        <a href ="@{Candidatos.removerFoto(candidato.id)}" class="btn btn-danger btn-sm " onclick="excluir(1)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                        #{/if}
+                        #{else}
+                        <a class="btn btn-danger btn-sm " onclick="excluir(1);"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                        #{/else}
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group">
                <label for="zona">Zona</label>
                <select name="idZona">
@@ -56,3 +87,5 @@
         </form>
     </div>
 </div>
+<!--chamada da mudança de foto-->
+<script src="@{'/public/js/uploadImg.js'}" type="text/javascript" charset="${_response_encoding}"></script>

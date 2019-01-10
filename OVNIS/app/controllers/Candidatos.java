@@ -28,14 +28,18 @@ public class Candidatos extends Controller{
         Zona zona = null;
         if(idZona != null){
             zona = Zona.findById(idZona);
-            
         }
+
         candidato.setZona(zona);
+
+        if(params.get("excluirFoto") != null) {
+            candidato.foto.getFile().delete();
+        }
         candidato.save();
         renderTemplate("Candidatos/detalhes_candidato.html", candidato);
     }
     
-    public static void editar_candidato(long id) {
+    public static void editar_candidato(Long id) {
         List<Zona> zonas = Zona.findAll();
         List<Cargo> cargos = Cargo.findAll();
         Candidato candidato = Candidato.findById(id);
@@ -47,7 +51,7 @@ public class Candidatos extends Controller{
         render(candidatos);
     }
     
-    public static void remover_candidato(long id) {
+    public static void remover_candidato(Long id) {
         Candidato candidato = Candidato.findById(id);
         candidato.delete();
         listar_candidatos();
@@ -58,4 +62,12 @@ public class Candidatos extends Controller{
         Cargo cargo = Cargo.findById(candidato.idCargo);
         render(candidato, cargo);
     }
+    
+    public static void removerFoto(Long id) {
+        Candidato candidato = Candidato.findById(id);
+        candidato.foto.getFile().delete();
+        editar_candidato(id);
+    }
+    
+    
 }

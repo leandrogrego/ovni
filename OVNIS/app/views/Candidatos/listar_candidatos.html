@@ -7,8 +7,9 @@
  <div class="card-body">
      <table class="table dataTable" id="dataTable">
        <thead>
-         <tr><th rowspan="1" colspan="1">#Nome</th>
-         <th rowspan="1" colspan="1">Numero</th>
+         <th rowspan="1" colspan="1">#Numero</th>
+         <th rowspan="1" colspan="1">Foto</th>
+         <th rowspan="1" colspan="1">Nome</th>
          <th rowspan="1" colspan="1">Zona</th>
          <th rowspan="1" colspan="1">Cargo</th>
          <th>Ações</th>
@@ -16,9 +17,22 @@
        <tbody>
 	#{list items:candidatos, as:'candidato'}
         <tr role="row">
-           <td>${candidato.nome}</td>
-           <td>${candidato.numero}</td>
-           <td>${candidato?.zona?.nome}</td>
+            <td>${candidato.numero}</td>
+            <td>
+                #{if candidato?.foto?.exists()}
+                    <img height="50" src="@{api.fotoCandidato(candidato.id)}" id="img" accept="image/*" class="img-responsive" class="img-thumbnail" >
+                #{/if}
+                #{else}
+                    <img height="50" src="/public/images/fotoPadrao.jpg" id="img" accept="image/*"  class="img-responsive" class="img-thumbnail" >
+                #{/else}
+            </td>
+           <td>
+                ${candidato.nome}<br/>
+                ${candidato.vice}
+           </td>
+           <td>
+               ${candidato?.zona}
+           </td>
            <td>${candidato.idCargo}</td>           
            <td>
                 <a href="@{Candidatos.detalhes_candidato(candidato.id)}">

@@ -3,15 +3,17 @@ package models;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import play.db.jpa.Blob;
 import play.db.jpa.Model;
 
 @Entity
 public class Candidato extends Model{
-    
+    public Blob foto;
     public String nome;
     public int numero;
     public int totalVotos;
     public Long idCargo;
+    public String vice;
     
     //@ManyToOne
     //@JoinColumn(name="idCargo")
@@ -21,14 +23,6 @@ public class Candidato extends Model{
     @ManyToOne
     @JoinColumn(name="idZona")
     public Zona zona;
-
-    public Candidato(String nome, int numero, Cargo cargo, Zona zona) {
-        this.nome = nome;
-        this.numero = numero;
-        //this.cargo = cargo;
-        this.zona = zona;
-        this.totalVotos = 0;
-    }
 
     public String getNome() {
         return nome;
@@ -59,4 +53,5 @@ public class Candidato extends Model{
         this.zona = zona;
     }
     
+
 }
