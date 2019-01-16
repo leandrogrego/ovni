@@ -1,0 +1,35 @@
+#{extends 'main.html' /}
+#{set title:'Consulta Loger Data' /}
+
+<div class="card mb-3">
+ <div class="card-header">
+   <i class="fa fa-table"></i>Consulta Loge Data</div>
+ <div class="card-body">
+     <form method="get" action="/Logers/buscaLogDate">
+         <input type="date" name="data">
+         <input type="submit" value="Buscar">
+    </form>
+     <br>
+     <form method="get" action="/Logers/buscaLogId">
+         <input name="id">
+        <input type="submit" value="Buscar">
+     </form>
+       <div class="card-body">
+       <table class="table dataTable" id="dataTable">
+         <thead>
+           <tr><th rowspan="1" colspan="1">#Data</th>
+           <th rowspan="1" colspan="1">Loger</th>
+         </thead>
+         <tbody>
+          #{list items:logers, as:'loger'}
+          <tr role="row">
+             <td>${loger.data}</td>
+             <td>${loger.log}</td>
+           </tr>
+          #{/list}
+          </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

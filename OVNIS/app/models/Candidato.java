@@ -12,6 +12,7 @@ public class Candidato extends Model{
     public String nome;
     public int numero;
     public int totalVotos;
+    public int contagem;
     public Long idCargo;
     public String vice;
     

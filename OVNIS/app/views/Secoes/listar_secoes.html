@@ -4,12 +4,24 @@
 <div class="card mb-3">
  <div class="card-header">
     <i class="fa fa-table"></i>Listagem de Secões
+    <a href="@{Secoes.startEleicao()}">
+        <button class="btn btn-sm btn-success">
+            <i class="fa fa-edit">Iniciar Votação</i>
+        </button>
+    </a>
+    <a href="@{Secoes.endEleicao()}">
+        <button class="btn btn-sm btn-danger">
+            <i class="fa fa-edit">Finalizar Votação</i>
+        </button>
+    </a>
  </div>
  <div class="card-body">
      <table class="table dataTable" id="dataTable">
        <thead>
          <th rowspan="1" colspan="1">Zona</th>  
          <th rowspan="1" colspan="1">Seção</th>
+         <th rowspan="1" colspan="1">IPs</th>
+         <th rowspan="1" colspan="1">Status</th>
          <th>Ações</th>
        </thead>
        <tbody>
@@ -18,16 +30,35 @@
            <td>${secao.getZona().id} - ${secao.getZona().nome}</td>
            <td>${secao.id} - ${secao.nome}</td>
            <td>
+               Terminal: ${secao.ipTerminal}<br>
+               Urna: ${secao.ipUrna}
+           </td>
+           <td>
+               #{if secao.bloqueio}
+                 FRACHADA
+               #{/if}
+               #{else}
+                 ABERTA
+               #{/else}
+           </td>
+           <td>
                 <a href="@{Secoes.detalhes_secao(secao.id)}">
                     <button class="btn btn-sm btn-info">
                         <i class="fa fa-user">Detalhes</i>
                     </button>
                 </a>
+               #{if secao.bloqueio}
                 <a href="@{Secoes.editar_secao(secao.id)}">
                     <button class="btn btn-sm btn-success">
                         <i class="fa fa-edit">Editar</i>
                     </button>
                 </a>
+                <a href="@{Boletins.index(secao.id)}">
+                    <button class="btn btn-sm btn-warning">
+                        <i class="fa fa-table">Boletim</i>
+                    </button>
+                </a>
+               #{/if}
            </td>
          </tr>
 	#{/list}

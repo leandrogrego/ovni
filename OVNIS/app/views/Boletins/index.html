@@ -1,0 +1,53 @@
+#{extends 'main.html' /}
+#{set title:'Consulta Boletim' /}
+
+<div class="card mb-3">
+ <div class="card-header">
+   <i class="fa fa-table"></i>Consulta Boletim</div>
+ <div class="card-body">
+     <br>
+       <div class="card-body">
+       <table class="table dataTable">
+         <thead>
+            <tr>
+                <th align="center">Votos Brancos</th>
+                <th align="center">Votos Nulos</th>
+                <th align="center">Votos Válidos</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr role="row">
+                <td align="center">${boletim?.votoBranco}</td>
+                <td align="center">${boletim?.votoNulo}</td>
+                <td align="center">${boletim?.votoValido}</td>
+            </tr>
+        </tbody>
+      </table>
+      <table class="table dataTable">
+        <thead>
+          <tr role="row">
+            <th align="center" colspan="3">Candidatos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th align="center">Número</th>
+            <th align="center">Nome</th>
+            <th align="center">Votos na Urna</th>
+            <th align="center">Votos na Base</th>
+          </tr>
+          
+          #{list items:boletim?.candidatos, as:'candidato'}
+          <tr role="row">
+            <td align="center">${candidato.numero}</td>
+            <td>${candidato.nome}</td>
+            <td align="center">${candidato.totalVotos}</td>
+            <td align="center">${candidato.contagem}</td>
+          </tr>1
+          #{/list}
+          </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

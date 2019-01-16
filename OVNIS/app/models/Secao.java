@@ -69,4 +69,9 @@ public class Secao extends Model{
         List<Eleitor> eleitores = Eleitor.find("byIdSecao", this.id).fetch();
         return eleitores;
     }
+    
+    public List<Voto>getVotos(){
+        List<Voto> votos = Voto.find("byIdSecao", this.id).fetch();
+        return votos;
+    }
 }

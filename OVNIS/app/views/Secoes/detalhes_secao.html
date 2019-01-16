@@ -11,6 +11,7 @@
             Nome: ${secao?.nome}
         </div>
         <div class="form-group">
+            #{if secao.bloqueio==false}
             #{if secao.ipTerminal != null && secao.ipTerminal != ""}
                 <form action="@{Secoes.resetTerminal}" method="get">
                     <input type="hidden" name="id" value="${secao.id}">
@@ -23,11 +24,14 @@
                     <input type="submit" class="btn btn-black btn-group" value="Reset Urna">
                 </form>
             #{/if}
+            #{/if}
         </div>
+
+        #{if secao.bloqueio}
         <br>
         <form action="@{Secoes.editar_secao}" method="get">
             <input type="hidden" name="id" value="${secao.id}">
-            <input type="submit" class="btn btn-primary btn-block" value="Editar">
+            <input type="submit" class="btn btn-success btn-block" value="Editar">
         </form>
         <br>
         <script>
@@ -43,10 +47,15 @@
             <input type="submit" class="btn btn-danger btn-block" value="Remover">
         </form>
         <br>
+        <form action="@{Boletins.index}" method="get">
+            <input type="hidden" name="ipUrna" value="${secao.id}">
+            <input type="submit" class="btn btn-primary btn-block" value="Boletim">
+        </form>
+        #{/if}
+        <br>
         <form action="@{Secoes.listar_secoes}" method="get">
             <input type="submit" class="btn btn-warning btn-block" value="Listar">
         </form>
-        <br>
     </div>
     <div class="card-header">
     <i class="fa fa-table"></i>Listagem de Eleitores
