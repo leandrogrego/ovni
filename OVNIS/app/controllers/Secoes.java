@@ -1,7 +1,11 @@
 package controllers;
 
+import enums.Status_Voto;
 import java.util.List;
+import models.Candidato;
+import models.Eleitor;
 import models.Secao;
+import models.Voto;
 import models.Zona;
 import play.mvc.Before;
 import play.mvc.Controller;
@@ -76,5 +80,39 @@ public class Secoes extends Controller{
         secao.setIpTerminal("");
         secao.save();
         renderTemplate("Secoes/detalhes_secao.html", secao);
+    }
+    
+        public static void startEleicao(){
+        List<Candidato> candidatos = Candidato.findAll();
+        candidatos.forEach(c -> {
+            c.totalVotos=0;
+            c.save();
+        });
+        List<Voto> votos = Voto.findAll();
+        votos.forEach(v -> {
+            v.delete();
+        });
+        List<Eleitor> eleitores = Eleitor.findAll();
+        eleitores.forEach(e -> {
+            e.statusVot=Status_Voto.NAO_VOTOU;
+            e.save();
+        });
+        List<Secao> secoes = Secao.findAll();
+        secoes.forEach(s -> {
+            s.bloqueio=false;
+            s.ipUrna=null;
+            s.ipTerminal=null;
+            s.save();   
+        });  
+        listar_secoes();
+    }
+        
+    public static void endEleicao(){
+        List<Secao> secoes = Secao.findAll();
+        secoes.forEach(s -> {
+            s.bloqueio=true;
+            s.save();
+        });
+        listar_secoes();
     }
 }

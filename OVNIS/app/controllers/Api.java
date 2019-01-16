@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import enums.Status_Eleitor;
 import enums.Status_Voto;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import models.Candidato;
 import models.Cargo;
@@ -23,7 +25,7 @@ public class Api extends Controller{
         renderJSON(g.toJson(eleitor));
     }
     
-    public static void justificar(String titulo) {
+    public static void justificar(String titulo, String ipUrna) {
         Eleitor e = Eleitor.find("byTitulo", titulo).first();
         if(e != null 
                 && e.statusVot == Status_Voto.NAO_VOTOU  
@@ -31,7 +33,7 @@ public class Api extends Controller{
         {
             e.statusVot = Status_Voto.JUSTIFICOU;
             e.save();
-            new Loger("justificar "+titulo);
+            new Loger("action='justificar', param='"+titulo+"', author="+ipUrna);
             renderJSON(g.toJson(e));
         } else {
             Mensagem RESULT = new Mensagem("Erro","O Eleitor já votou ou justificou ou está inápto");
@@ -56,29 +58,39 @@ public class Api extends Controller{
     }
     
     public static void setUrna(long idSecao, String ipUrna) {
-        Secao secao = Secao.findById(idSecao);
+        Secao secao = Secao.find("ipUrna LIKE ?",ipUrna).first();
         Mensagem RESULT;
-        if(secao.getIpUrna() == null || "".equals(secao.getIpUrna())){
-            secao.setIpUrna(ipUrna);
-            secao.save();
-            RESULT = new Mensagem("Success","Seção vinculada com sucesso");
-            new Loger("setUrna: idSecao="+idSecao+": ipUrna="+ipUrna);
+        if(secao != null){
+            RESULT = new Mensagem("Error","Urna já vinculada à uma Seção!");
         } else {
-            RESULT = new Mensagem("Error","Seção já vinculada a outra urna");
+        secao = Secao.findById(idSecao);
+            if(secao.getIpUrna() == null || "".equals(secao.getIpUrna())){
+                secao.setIpUrna(ipUrna);
+                secao.save();
+                RESULT = new Mensagem("Success","Seção vinculada com sucesso");
+                new Loger("action='setUrna:', ipUrna='"+ipUrna+"', author='"+ipUrna+"'");
+            } else {
+                RESULT = new Mensagem("Error","Seção já vinculada a outra urna");
+            }
         }
         renderJSON(g.toJson(RESULT));
     }
     
     public static void setTerminal(long idSecao, String ipTerminal) {
-        Secao secao = Secao.findById(idSecao);
+        Secao secao = Secao.find("ipTerminal LIKE ?",ipTerminal).first();
         Mensagem RESULT;
-        if(secao.getIpTerminal() == null || "".equals(secao.getIpTerminal())){
-            secao.setIpTerminal(ipTerminal);
-            secao.save();
-            RESULT = new Mensagem("Success","Seção vinculada com sucesso");
-            new Loger("setTerminal: idSecao="+idSecao+": ipUrna="+ipTerminal);
+        if(secao != null){
+            RESULT = new Mensagem("Error","Terminal já vinculada à uma Seção!");
         } else {
-            RESULT = new Mensagem("Erro","Seção já vinculada a outro terminal");
+        secao = Secao.findById(idSecao);
+            if(secao.getIpTerminal() == null || "".equals(secao.getIpTerminal())){
+                secao.setIpTerminal(ipTerminal);
+                secao.save();
+                RESULT = new Mensagem("Success","Seção vinculada com sucesso");
+                new Loger("action='setTerminal:', ipTerminal='"+ipTerminal+"', author='"+ipTerminal+"'");
+            } else {
+                RESULT = new Mensagem("Erro","Seção já vinculada a outro terminal");
+            }
         }
         renderJSON(g.toJson(RESULT));
     }
@@ -86,6 +98,21 @@ public class Api extends Controller{
     public static void getTerminal(long idSecao) {
         Secao secao = Secao.findById(idSecao);
         Mensagem RESULT = new Mensagem("ipTerminal",secao.getIpTerminal());
+        renderJSON(g.toJson(RESULT));
+    }
+    
+    
+    
+    public static void encerraSecao(Long idSecao, String ipTerminal){
+        Secao secao = Secao.findById(idSecao);
+        Mensagem RESULT;
+        if(secao.getIpTerminal().equals(ipTerminal)){
+        	secao.bloqueio=true;
+        	secao.save();
+            RESULT = new Mensagem("Success","Seção encerrada com sucesso.");
+        } else {
+            RESULT = new Mensagem("Error","Seção não vivulada a esse terminal");
+        }
         renderJSON(g.toJson(RESULT));
     }
     
@@ -99,7 +126,7 @@ public class Api extends Controller{
             if(eleitor.statusEle.equals(Status_Eleitor.APTO) && eleitor.statusVot.equals(Status_Voto.NAO_VOTOU)){
                 eleitor.statusVot = Status_Voto.VOTOU;
                 eleitor.save();
-                new Loger("setStatusEleitor: idSecao="+idSecao+": titulo="+titulo);
+                new Loger("action='setStatusEleitor', titulo='"+titulo+"', author='"+secao.id+"'");
                 renderJSON(g.toJson(eleitor));
              } else {
                 Mensagem RESULT = new Mensagem("Error","Eleitor ja votou ou jutificou ou está inápto.");
@@ -107,6 +134,8 @@ public class Api extends Controller{
             }
         }
     }
+    
+
     
     public static void setVotoEleitor(int numCandidato, int idCargo, String ipUrna) {
         Secao secao = Secao.find("byIpUrna", ipUrna).first();
@@ -123,7 +152,7 @@ public class Api extends Controller{
                     voto = new Voto(candidato, secao);
                     candidato.totalVotos++;
                     candidato.save();
-                    new Loger("setVotoEleitor: numCandidato="+numCandidato+": idCargo="+idCargo);
+                    new Loger("action='setVotoEleitor', numCandidato='"+numCandidato+"', author='"+secao.id+"'");
                 } else {
                     voto = new Voto(null, secao);
                 }
@@ -135,8 +164,22 @@ public class Api extends Controller{
     
     public void getCargos(){
         List<Cargo> cargos = Cargo.findAll();
+        for(Cargo c : cargos){
+            ordenaPorVotos(c.candidatos);
+        }
         renderJSON(g.toJson(cargos));
     }
+    
+    private static void ordenaPorVotos(List<Candidato> lista) {
+        Collections.sort(lista, new Comparator<Candidato>() {
+            @Override
+            public int compare(Candidato o1, Candidato o2) {
+                Integer a = o1.totalVotos;
+                Integer b = o1.totalVotos;
+                return a.compareTo(b);
+            }
+        });
+    }     
     
     public void getCandidatos(){
         List<Candidato> candidatos = Candidato.findAll();
@@ -160,6 +203,12 @@ public class Api extends Controller{
         votos.forEach(v -> {
             v.delete();
         });
+        
+        List<Loger> logs = Loger.findAll();
+        logs.forEach(l -> {
+            l.delete();
+        });
+        
         List<Eleitor> eleitores = Eleitor.findAll();
         eleitores.forEach(e -> {
             e.statusVot=Status_Voto.NAO_VOTOU;
@@ -167,11 +216,13 @@ public class Api extends Controller{
         });
         List<Secao> secoes = Secao.findAll();
         secoes.forEach(s -> {
+            s.bloqueio=true;
             s.ipUrna=null;
             s.ipTerminal=null;
             s.save();
         });
     }
+
     
     public void log(){
         List<Loger> logs = Loger.findAll();
